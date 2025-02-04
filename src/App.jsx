@@ -1,37 +1,37 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
 
 function App() {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [displayText, setDisplayText] = useState("");  // Initialize displayText as empty
+  const [errorMessage, setErrorMessage] = useState("");
   const textToType = "Welcome to WhatsApp Connect! Chat instantly.";
-
-  useEffect(() => {
-    let i = 0;
-    const interval = setInterval(() => {
-      setDisplayText((prev) => prev + textToType[i]);
-      i++;
-      if (i === textToType.length) clearInterval(interval); // Stop after typing all characters
-    }, 100); // Adjust typing speed here
-
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, []); // Empty dependency array ensures this runs only once when the component mounts
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Trim spaces from the phone number
     const trimmedPhoneNumber = phoneNumber.trim();
-    
-    if (trimmedPhoneNumber) {
-      // Open WhatsApp link if phone number is valid (after trimming)
-      window.open(`https://wa.me/${trimmedPhoneNumber}`);
+
+    // Basic phone number validation (e.g., must contain only digits and be of a reasonable length)
+    const phoneNumberPattern = /^[0-9]{10,15}$/;
+    if (phoneNumberPattern.test(trimmedPhoneNumber)) {
+      // Reset error message if valid
+      setErrorMessage("");
+      
+      // Directly open WhatsApp with the phone number (even if it's not saved in contacts)
+      const whatsappLink = `https://wa.me/${trimmedPhoneNumber}`;
+
+      // Open the WhatsApp chat directly
+      window.open(whatsappLink);
+    } else {
+      // Set error message if phone number is invalid
+      setErrorMessage("Please enter a valid phone number (10-15 digits).");
     }
   };
 
   return (
     <div className="app">
       <div className="container">
-        <h1 className="typewriter">{textToType}</h1> {/* This is the text that will be typed */}
+        <h1 className="typewriter">{textToType}</h1>
         <form onSubmit={handleSubmit} className="whatsapp-form">
           <input
             type="text"
@@ -42,6 +42,7 @@ function App() {
           />
           <button type="submit">Chat on WhatsApp</button>
         </form>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
     </div>
   );
