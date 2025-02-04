@@ -19,8 +19,12 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (phoneNumber) {
-      window.open(`https://wa.me/${phoneNumber}`, "_blank");
+    // Trim spaces from the phone number
+    const trimmedPhoneNumber = phoneNumber.trim();
+    
+    if (trimmedPhoneNumber) {
+      // Open WhatsApp link if phone number is valid (after trimming)
+      window.open(`https://wa.me/${trimmedPhoneNumber}`, "_blank");
     }
   };
 
