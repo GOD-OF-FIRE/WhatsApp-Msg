@@ -24,7 +24,7 @@ function App() {
     
     if (trimmedPhoneNumber) {
       // Open WhatsApp link if phone number is valid (after trimming)
-      window.open(`https://wa.me/${trimmedPhoneNumber}`, "_blank");
+      window.open(`https://wa.me/${trimmedPhoneNumber}`);
     }
   };
 
